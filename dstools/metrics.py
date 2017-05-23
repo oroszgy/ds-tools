@@ -95,9 +95,9 @@ def binom_interval(success, total, confint=0.95):
     return lower, upper
 
 
-def accuracy_confidence_interval(cm):
-    return binom_interval(sum(np.diag(cm)), sum(cm))
+def accuracy_confidence_interval(cm, confint=0.9):
+    return binom_interval(np.diag(cm).sum(), cm.sum(), confint)
 
 
 def accuracy_p_value(cm):
-    return binom_test(sum(np.diag(cm)), n=sum(cm))
+    return binom_test(np.diag(cm).sum(), n=cm.sum())
