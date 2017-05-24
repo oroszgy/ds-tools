@@ -1,5 +1,4 @@
 import itertools
-import re
 
 import numpy as np
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
@@ -67,13 +66,8 @@ def print_confusion_matrix(cm, labels, hide_zeroes=False, hide_diagonal=False, h
         print()
 
 
-def print_classification_pipeline_scores(y_test, y_pred, pipeline=None, y_score=None, X_train=None, y_train=None,
-                                         confidence_level=0.9,
-                                         show_pipeline=False, show_topk=False, show_cm=True, show_trainresults=False):
-    if show_pipeline:
-        assert pipeline is not None
-        print(re.sub("\s+", " ", str(pipeline)), "\n")
-
+def print_classification_pipeline_scores(y_test, y_pred, y_score=None, labels=None, confidence_level=0.9,
+                                         show_topk=False, show_cm=False):
     print("=== Test results ===")
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
     print()
@@ -84,8 +78,7 @@ def print_classification_pipeline_scores(y_test, y_pred, pipeline=None, y_score=
 
     if show_topk:
         assert y_score is not None
-        assert pipeline is not None
-        labels = pipeline.steps[-1][1].classes_
+        assert labels is not None
         print("Precision@3: {:.2f}%".format(
             precision_at_k_simple(y_test, y_score, labels, k=3) * 100))
         print("Precision@5: {:.2f}%".format(
@@ -94,14 +87,6 @@ def print_classification_pipeline_scores(y_test, y_pred, pipeline=None, y_score=
     print(classification_report(y_test, y_pred))
 
     if show_cm:
-        assert pipeline is not None
-        labels = pipeline.steps[-1][1].classes_
+        assert labels is not None
         cm = confusion_matrix(y_test, y_pred, labels)
         print_confusion_matrix(cm, labels=labels)
-
-    if show_trainresults:
-        assert X_train is not None and y_train is not None
-        print("=== Train results ===")
-        y_tpred = pipeline.predict(X_train)
-        print("Accuracy: {:.2f}%".format(accuracy_score(y_train, y_tpred) * 100))
-        print(classification_report(y_train, y_tpred))
