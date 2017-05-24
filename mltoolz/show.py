@@ -46,7 +46,7 @@ def plot_confusion_matrix(cm, classes,
 
 
 def print_confusion_matrix(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=None):
-    columnwidth = max([len(x) for x in labels] + [5])  # 5 is value length
+    columnwidth = max([len(str(x)) for x in labels] + [5])  # 5 is value length
     empty_cell = " " * columnwidth
     print("    " + empty_cell, end=" ")
     for label in labels:
