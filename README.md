@@ -1,3 +1,7 @@
-# Python Data Science tools
+# Machine Learning tools
 
-Common utility functions for daily data science work with sklearn, spacy, pandas, etc.
+Utility functions and classes to ease my dail work with sklearn, pandas, spacy, and matplotlib.
+
+## Install
+
+`$ pip install https://github.com/oroszgy/ml-toolz/archive/master.zip` 
