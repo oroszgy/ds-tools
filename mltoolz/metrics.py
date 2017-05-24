@@ -6,7 +6,17 @@ from sklearn.utils.fixes import partition
 from sklearn.utils.multiclass import type_of_target
 
 
-def precision_at_k_score(y_true, y_score, sample_weight=None, n_tops=1):
+def precision_at_k_simple(y_test, y_score, classes, k=3):
+    tp = []
+    for scores, y in zip(y_score, y_test):
+        args = np.array(scores.argsort()[-k:])
+        predictions = classes[args]
+        score = (predictions == y).any()
+        tp.append(score)
+    return np.mean(tp)
+
+
+def precision_at_k_score(y_true, y_score, sample_weight=None, k=3):
     """Compute the precision for n_tops scored labels
     Count how many time the ``n_tops`` label with highest score are in the set
     of true labels. One minus precision at 1 is also called one error.
@@ -21,7 +31,7 @@ def precision_at_k_score(y_true, y_score, sample_weight=None, n_tops=1):
         class, confidence values, or binary decisions.
     sample_weight : array-like of shape = [n_samples], optional
         Sample weights.
-    n_tops : int, optional
+    k : int, optional
         The number of labels on which the precision is computed.
     Returns
     -------
@@ -40,17 +50,17 @@ def precision_at_k_score(y_true, y_score, sample_weight=None, n_tops=1):
     if y_true.shape != y_score.shape:
         raise ValueError("y_true and y_score have different shape")
 
-    if n_tops < 1:
+    if k < 1:
         raise ValueError("Number of top labels must >= 1, got %s"
-                         % n_tops)
+                         % k)
 
     n_samples, n_labels = y_true.shape
 
     y_true = csr_matrix(y_true)
 
-    if n_tops > 1:
-        row_top_k = partition(y_score, kth=n_labels - n_tops,
-                              axis=1)[:, -n_tops]
+    if k > 1:
+        row_top_k = partition(y_score, kth=n_labels - k,
+                              axis=1)[:, -k]
     else:
         row_top_k = np.max(y_score, axis=1)
 
