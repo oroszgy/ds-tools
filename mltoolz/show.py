@@ -70,13 +70,13 @@ def print_classification_pipeline_scores(y_test, y_pred, y_score=None, labels=No
                                          show_topk=False, show_cm=False):
     print("=== Test results ===")
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
-    print()
     lower_acc, upper_acc = accuracy_confidence_interval(y_test, y_pred, confidence_level)
     print("Accuracy confidence intervals: {:.2f} and {:.2f} with {:.2f} level".format(lower_acc * 100, upper_acc * 100,
                                                                                       confidence_level))
     print("Accuracy p-value: {:.4f}".format(accuracy_p_value(y_test, y_pred)))
 
     if show_topk:
+        print()
         assert y_score is not None
         assert labels is not None
         print("Precision@3: {:.2f}%".format(
@@ -84,9 +84,11 @@ def print_classification_pipeline_scores(y_test, y_pred, y_score=None, labels=No
         print("Precision@5: {:.2f}%".format(
             precision_at_k_simple(y_test, y_score, labels, k=5) * 100))
 
+    print()
     print(classification_report(y_test, y_pred))
 
     if show_cm:
+        print()
         assert labels is not None
         cm = confusion_matrix(y_test, y_pred, labels)
         print_confusion_matrix(cm, labels=labels)
