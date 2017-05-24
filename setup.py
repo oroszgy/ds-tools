@@ -1,8 +1,8 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='ml-tools',
-    version='0.1',
+    version='0.1.0',
     packages=['mltoolz'],
     url='https://gyorgy.orosz.link',
     license='MIT',
