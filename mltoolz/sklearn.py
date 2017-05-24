@@ -4,11 +4,11 @@ import numpy
 from sklearn.preprocessing import FunctionTransformer
 
 
-def predict_k(pipeline, X, k=3):
-    X = pipeline.transform(X)
+def predict_k(pipeline, X, with_score=True, k=3):
     y_scores = pipeline.predict_proba(X)
     labels = pipeline.steps[-1][1].classes_
-    result = [[(str(l), float(s)) for l, s in zip(labels[numpy.array(scores.argsort())], numpy.sort(scores))][-k:][::-1]
+    result = [[(str(l), float(s)) if with_score else str(l) for l, s in
+               zip(labels[numpy.array(scores.argsort())], numpy.sort(scores))][-k:][::-1]
               for scores in y_scores]
     return result
 

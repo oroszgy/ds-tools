@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='ds-tools',
+    name='ml-tools',
     version='0.1',
-    packages=['dstools'],
+    packages=['mltoolz'],
     url='https://gyorgy.orosz.link',
     license='MIT',
     install_requires=[
