@@ -8,7 +8,7 @@ setup(
     license='MIT',
     install_requires=[
         'scikit-learn',
-        'matplotlib',
+        # 'matplotlib',
         'pandas',
         'spacy',
         'scipy',

@@ -2,7 +2,6 @@ import itertools
 import re
 
 import numpy as np
-from matplotlib import plot as plt
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
 from mltoolz.metrics import accuracy_confidence_interval, accuracy_p_value, precision_at_k_simple
@@ -13,11 +12,15 @@ def plot_confusion_matrix(cm, classes,
                           title='Confusion matrix',
                           size=(20, 20),
                           x_rotation=45,
-                          cmap=plt.cm.Blues):
+                          cmap=None):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
     """
+    import matplotlib.pyplot as plt
+
+    cmap = cmap or plt.cm.Blues
+
     plt.figure(figsize=size)
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
