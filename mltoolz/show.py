@@ -64,32 +64,41 @@ def print_confusion_matrix(cm, labels, hide_zeroes=False, hide_diagonal=False, h
         print()
 
 
-def print_classification_pipeline_scores(pipeline, X_test, y_test, X_train=None, y_train=None,
-                                         show_pipeline=False, show_topk=False, show_cm=True, show_trainscores=False):
-    if show_pipeline: print(re.sub("\s+", " ", str(pipeline)), "\n")
-    labels = pipeline.steps[-1][1].classes_
-
-    p_test = pipeline.predict(X_test)
-    cm = confusion_matrix(y_test, p_test, labels)
+def print_classification_pipeline_scores(y_test, y_pred, pipeline=None, y_score=None, X_train=None, y_train=None,
+                                         confidence_level=0.9,
+                                         show_pipeline=False, show_topk=False, show_cm=True, show_trainresults=False):
+    if show_pipeline:
+        assert pipeline is not None
+        print(re.sub("\s+", " ", str(pipeline)), "\n")
 
     print("=== Test results ===")
-    print("Accuracy: {:.2f}%".format(accuracy_score(y_test, p_test) * 100))
+    print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
     print()
-    print(
-        "True Accuracy is between: {:.2f} and {:.2f} with 90% probability".format(
-            *accuracy_confidence_interval(cm, 0.9)))
-    print("Accuracy p value: {:.4f}".format(accuracy_p_value(cm)))
+    lower_acc, upper_acc = accuracy_confidence_interval(y_test, y_pred, confidence_level)
+    print("Accuracy confidence intervals: {:.2f} and {:.2f} with {:.2f} level".format(lower_acc * 100, upper_acc * 100,
+                                                                                      confidence_level))
+    print("Accuracy p-value: {:.4f}".format(accuracy_p_value(y_test, y_pred)))
 
     if show_topk:
+        assert y_score is not None
+        assert pipeline is not None
+        labels = pipeline.steps[-1][1].classes_
         print("Precision@3: {:.2f}%".format(
-            precision_at_k_simple(y_test, pipeline.predict_proba(X_test), labels, k=3) * 100))
+            precision_at_k_simple(y_test, y_score, labels, k=3) * 100))
         print("Precision@5: {:.2f}%".format(
-            precision_at_k_simple(y_test, pipeline.predict_proba(X_test), labels, k=5) * 100))
-        print(classification_report(y_test, p_test))
+            precision_at_k_simple(y_test, y_score, labels, k=5) * 100))
 
-    if show_cm: print_confusion_matrix(cm, labels=labels)
+    print(classification_report(y_test, y_pred))
 
-    if show_trainscores:
+    if show_cm:
+        assert pipeline is not None
+        labels = pipeline.steps[-1][1].classes_
+        cm = confusion_matrix(y_test, y_pred, labels)
+        print_confusion_matrix(cm, labels=labels)
+
+    if show_trainresults:
         assert X_train is not None and y_train is not None
         print("=== Train results ===")
-        print(classification_report(y_train, pipeline.predict(X_train)))
+        y_tpred = pipeline.predict(X_train)
+        print("Accuracy: {:.2f}%".format(accuracy_score(y_train, y_tpred) * 100))
+        print(classification_report(y_train, y_tpred))

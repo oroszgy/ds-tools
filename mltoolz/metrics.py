@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.stats import beta, binom_test
+from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length
 from sklearn.utils.fixes import partition
 from sklearn.utils.multiclass import type_of_target
@@ -98,16 +99,17 @@ def print_confusion_matrix(cm, labels, hide_zeroes=False, hide_diagonal=False, h
 
 
 def binom_interval(success, total, confint=0.95):
-    '''from paulgb's binom_interval.py'''
-    quantile = (1 - confint) / 2.
+    quantile = (1 - confint) / 2.0
     lower = beta.ppf(quantile, success, total - success + 1)
     upper = beta.ppf(1 - quantile, success + 1, total - success)
     return lower, upper
 
 
-def accuracy_confidence_interval(cm, confint=0.9):
-    return binom_interval(np.diag(cm).sum(), cm.sum(), confint)
+def accuracy_confidence_interval(y_test, y_pred, confidence_level=0.9):
+    cm = confusion_matrix(y_test, y_pred)
+    return binom_interval(np.diag(cm).sum(), cm.sum(), confidence_level)
 
 
-def accuracy_p_value(cm):
+def accuracy_p_value(y_test, y_pred):
+    cm = confusion_matrix(y_test, y_pred)
     return binom_test(np.diag(cm).sum(), n=cm.sum())
