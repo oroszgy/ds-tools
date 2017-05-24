@@ -85,10 +85,12 @@ def print_classification_pipeline_scores(y_test, y_pred, y_score=None, labels=No
             precision_at_k_simple(y_test, y_score, labels, k=5) * 100))
 
     print()
+    print("Classification report")
     print(classification_report(y_test, y_pred))
 
     if show_cm:
         print()
+        print("Confusion matrix")
         assert labels is not None
         cm = confusion_matrix(y_test, y_pred, labels)
         print_confusion_matrix(cm, labels=labels)
