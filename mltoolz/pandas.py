@@ -25,6 +25,7 @@ class DataFrameColumnTransformer(BaseEstimator, TransformerMixin):
             self.transformer = self.transformer.fit(X[self.selector].values)
         else:
             self.transformer = self.transformer.fit(X[self.selector].values, y)
+        return self
 
     def transform(self, X):
-        X[self.selector] = self.transformer.transform(X[self.selector].values)
+        return self.transformer.transform(X[self.selector].values)
