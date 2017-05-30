@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial, wraps
 
 import numpy
 from scipy.sparse import issparse
@@ -21,10 +21,13 @@ def _batch_process(texts, func):
 
 def transformerize(function):
     """Creates a sklearn transformer from a python method. Used as a decorator."""
-    return FunctionTransformer(
-        func=partial(_batch_process, func=function),
+    ft = FunctionTransformer(
+        func=partial(_batch_process, afunc=function),
         validate=False
     )
+
+    # TODO: make the transformer pickleable
+    return wraps(function)(ft)
 
 
 class DenseTransformer(BaseEstimator, TransformerMixin):
