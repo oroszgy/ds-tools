@@ -13,7 +13,8 @@ Token = namedtuple("Token", ("text", "lemma", "tag", "pos"))
 
 @transformerize
 def nlp(text):
-    return [Token(tok.text, tok.lemma_, tok.tag_, tok.pos_) for tok in _nlp(text)]
+    # return [Token(tok.text, tok.lemma_, tok.tag_, tok.pos_) for tok in _nlp(text)]
+    return list(nlp(str(text)).sents)
 
 
 class DocFeature(BaseEstimator, TransformerMixin):
