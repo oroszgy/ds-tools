@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='ml-tools',
     version='0.1.0',
-    packages=['mltoolz'],
+    packages=['mltools'],
     url='https://gyorgy.orosz.link',
     license='MIT',
     install_requires=[

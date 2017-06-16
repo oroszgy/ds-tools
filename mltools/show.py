@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
-from mltoolz.metrics import accuracy_confidence_interval, accuracy_p_value, precision_at_k_simple
+from mltools.metrics import accuracy_confidence_interval, accuracy_p_value, precision_at_k_simple
 
 
 def plot_confusion_matrix(cm, classes,
