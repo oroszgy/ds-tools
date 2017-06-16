@@ -23,7 +23,7 @@ class ExperimentTracker(object):
                 if type(value) in [int, float, numpy.float64, numpy.float32, numpy.float16, numpy.float128,
                                    numpy.int8, numpy.int16, numpy.int32, numpy.int64, numpy.uint8, numpy.uint16,
                                    numpy.uint32, numpy.uint64]:
-                    print("{}:\t\t{:.2f}".format(key, value))
+                    print("{:25s}: {:.4f}".format(key, value))
                 else:
                     print("{}:\n\t{}".format(key, value))
 
