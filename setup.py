@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='ml-tools',
+    name='mltools',
     version='0.1.0',
     packages=['mltools'],
     url='https://gyorgy.orosz.link',
